@@ -19,6 +19,7 @@ namespace ProCodeGuide.Samples.Serilog
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(builder=>builder.AddJsonFile("serilog.json",false,true))
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

@@ -26,6 +26,8 @@ namespace ProCodeGuide.Samples.Serilog.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logger.LogDebug("Debug");
+            _logger.LogTrace("Trace");
             _logger.LogInformation("In Weather Forecast Get Method");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

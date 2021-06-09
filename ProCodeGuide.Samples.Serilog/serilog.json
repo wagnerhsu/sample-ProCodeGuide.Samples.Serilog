@@ -1,0 +1,67 @@
+﻿{
+  "Serilog": {
+    "LevelSwitches": {
+      "$consoleSwitch": "Verbose",
+      "$fileSwitch": "Debug"
+    },
+    "MinimumLevel": "Verbose",
+    "Override": {
+      "Microsoft.AspNetCore": "Warning"
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message}{NewLine}{Exception}",
+          "levelSwitch": "$consoleSwitch"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "Logs\\Samples.log",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Properties} {Message:lj}{NewLine}{Exception}",
+          "rollingInterval": "Day",
+          "levelSwitch": "$fileSwitch"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "Serilogs\\AppLogs.json",
+          "formatter": "Serilog.Formatting.Json.JsonFormatter, Serilog"
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "configureLogger": {
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "path": "Serilogs\\api.log",
+                  "outputTemplate": "{Timestamp:HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}"
+                }
+              }
+            ],
+            "Filter": [
+              {
+                "Name": "ByExcluding",
+                "Args": {
+                  "expression": "StartsWith(SourceContext, 'Microsoft.')"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "Enrich": [
+      "FromLogContext",
+      "WithMachineName",
+      "WithProcessId",
+      "WithThreadId"
+    ]
+  }
+}
